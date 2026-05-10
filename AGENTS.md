@@ -13,7 +13,8 @@ This is a **configuration-only / knowledge-base repository** — it contains no 
 ### Authentication
 
 - Authenticated API calls require a **Bearer token** passed via `Authorization: Bearer <token>`.
-- The token should be stored locally in `token.txt` at the repo root (gitignored). Alternatively, set `PROBOX_BEARER_TOKEN` as an environment secret.
+- The `PROBOX_BEARER_TOKEN` environment secret is the preferred source. Use it in curl: `-H "Authorization: Bearer $PROBOX_BEARER_TOKEN"`.
+- Fallback: `token.txt` at the repo root (gitignored).
 - **Never** commit tokens to the repository.
 
 ### API connectivity
@@ -21,6 +22,12 @@ This is a **configuration-only / knowledge-base repository** — it contains no 
 - The target tenant is `https://hapl.s4.probox.one`.
 - **`OPTIONS /v4`** works without authentication and returns the full module discovery (59 modules). Use this to verify network connectivity.
 - All data-reading endpoints (e.g. `GET /v4/contact/contacts`) require a valid Bearer token (returns HTTP 401 without one).
+
+### Gotchas
+
+- The `filter_Name` parameter on contacts is an exact-match filter on the `Name` field, not a fuzzy search. Contact codes (e.g. `DAYRANANHTHU`) may not match by name — use `filter_Code` for code-based lookups instead.
+- Do **not** use `filter_search` unless you first confirm it is supported via `OPTIONS` on that resource — some tenants error on unsupported filter columns.
+- The `select` parameter can cause JOIN errors on some tenants; avoid it unless verified via OPTIONS docs.
 
 ### No lint / test / build
 
