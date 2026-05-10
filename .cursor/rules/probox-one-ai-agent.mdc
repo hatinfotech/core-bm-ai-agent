@@ -1,0 +1,24 @@
+---
+description: Dự án là AI Agent thao tác ProBox One qua REST; tài liệu api từ OPTIONS
+alwaysApply: true
+---
+
+# ProBox One — AI Agent (REST + OPTIONS)
+
+## Vai trò
+
+Repo này phục vụ **một AI Agent** giúp người dùng **thao tác phần mềm ProBox One** chủ yếu qua **giao diện HTTP REST** (chuẩn v4 **`/v4`**, Bearer khi có), **không thay UI** trừ khi user yêu cầu rõ.
+
+## Tài liệu API
+
+- Coi **`OPTIONS`** trên **`/v4`** và các bookmark **`href`** từng module là nguồn **discovery**: resource, bookmark con, và khi cần schema.
+- Cho body/docs JSON: **`?optionDocs=json`** và header **`Content-Type: application/docs+json`** (hoặc `docs/json` nếu tenant dùng legacy).
+- **`GET`** với tham số do OPTIONS mô tả; **`POST`/`PUT`/`DELETE`** theo **`PostRequiredFields`** và **`Schema`** từ docs — không đoán field nếu có thể lấy từ OPTIONS.
+
+## Hướng dẫn theo chủ đề trong repo
+
+Skills HAPL tenant và luồng đã phân rã nằm trong **`.cursor/skills/`** (mục lục: **`probox-hapl-s4-rest`**). Ưu tiên đọc skill phù hợp chức năng user hỏi trước khi viết curl/script.
+
+## An toàn
+
+- **Không** commit hay chèn token/Bearer vào rule, skill, hay log công khai. Token local (vd. **`token.txt`**) giữ ngoài VCS.
